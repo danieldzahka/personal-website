@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Calculator - Daniel Zahka</title>
+    <link rel="stylesheet" href="../css/tufte.css"/>
+    <link rel="stylesheet" href="../css/latex.css"/>
+    <link rel="stylesheet" href="../css/navigation.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .calculator {
+            max-width: 300px;
+            margin: 2rem 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 1rem;
+            background: #f9f9f9;
+        }
+        .display {
+            width: 100%;
+            height: 60px;
+            font-size: 1.5rem;
+            text-align: right;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+        button {
+            height: 50px;
+            font-size: 1.2rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background: #f0f0f0;
+        }
+        .operator {
+            background: #e8e8e8;
+        }
+        .equals {
+            background: #4CAF50;
+            color: white;
+        }
+        .clear {
+            background: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../apps.html" class="active">Apps</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <article>
+        <h1>Calculator</h1>
+
+        <section>
+            <p><span class="newthought">A simple calculator</span> built with vanilla JavaScript.</p>
+
+            <div class="calculator">
+                <input type="text" class="display" id="display" readonly>
+                <div class="buttons">
+                    <button class="clear" onclick="clearDisplay()">C</button>
+                    <button onclick="deleteLast()">⌫</button>
+                    <button class="operator" onclick="appendToDisplay('/')">/</button>
+                    <button class="operator" onclick="appendToDisplay('*')">×</button>
+
+                    <button onclick="appendToDisplay('7')">7</button>
+                    <button onclick="appendToDisplay('8')">8</button>
+                    <button onclick="appendToDisplay('9')">9</button>
+                    <button class="operator" onclick="appendToDisplay('-')">-</button>
+
+                    <button onclick="appendToDisplay('4')">4</button>
+                    <button onclick="appendToDisplay('5')">5</button>
+                    <button onclick="appendToDisplay('6')">6</button>
+                    <button class="operator" onclick="appendToDisplay('+')">+</button>
+
+                    <button onclick="appendToDisplay('1')">1</button>
+                    <button onclick="appendToDisplay('2')">2</button>
+                    <button onclick="appendToDisplay('3')">3</button>
+                    <button class="equals" onclick="calculate()" rowspan="2">=</button>
+
+                    <button onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button>
+                    <button onclick="appendToDisplay('.')">.</button>
+                </div>
+            </div>
+
+            <h2>Features</h2>
+            <ul>
+                <li>Basic arithmetic operations</li>
+                <li>Clear and backspace functionality</li>
+                <li>Decimal number support</li>
+                <li>Keyboard support</li>
+            </ul>
+        </section>
+    </article>
+
+    <script>
+        const display = document.getElementById('display');
+
+        function appendToDisplay(value) {
+            display.value += value;
+        }
+
+        function clearDisplay() {
+            display.value = '';
+        }
+
+        function deleteLast() {
+            display.value = display.value.slice(0, -1);
+        }
+
+        function calculate() {
+            try {
+                // Replace × with * for calculation
+                const expression = display.value.replace(/×/g, '*');
+                const result = eval(expression);
+                display.value = result;
+            } catch (error) {
+                display.value = 'Error';
+            }
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+
+            if (key >= '0' && key <= '9' || key === '.') {
+                appendToDisplay(key);
+            } else if (key === '+' || key === '-' || key === '/' || key === '*') {
+                appendToDisplay(key === '*' ? '×' : key);
+            } else if (key === 'Enter' || key === '=') {
+                calculate();
+            } else if (key === 'Escape' || key === 'c' || key === 'C') {
+                clearDisplay();
+            } else if (key === 'Backspace') {
+                deleteLast();
+            }
+        });
+    </script>
+</body>
+</html>
